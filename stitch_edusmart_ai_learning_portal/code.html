@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | EduSphere AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eff4ff",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#23005c",
+                        "on-secondary-container": "#004666",
+                        "on-secondary-fixed-variant": "#004c6e",
+                        "secondary-fixed-dim": "#89ceff",
+                        "primary-container": "#4f46e5",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-glass-dark": "rgba(15, 23, 42, 0.8)",
+                        "on-tertiary-fixed-variant": "#5516be",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "success": "#10B981",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "tertiary-container": "#6f3dd9",
+                        "on-secondary-fixed": "#001e2f",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#e3d5ff",
+                        "tertiary-fixed-dim": "#d0bcff",
+                        "tertiary": "#571ac0",
+                        "on-primary-fixed": "#0f0069",
+                        "outline-variant": "#c7c4d8",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary-container": "#39b8fd",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-container": "#e5eeff",
+                        "on-error-container": "#93000a",
+                        "primary": "#3525cd",
+                        "error-container": "#ffdad6",
+                        "surface-glass-light": "rgba(255, 255, 255, 0.7)",
+                        "outline": "#777587",
+                        "ai-accent": "#22D3EE",
+                        "on-background": "#0b1c30",
+                        "secondary-fixed": "#c9e6ff",
+                        "surface-container-high": "#dce9ff",
+                        "error": "#EF4444",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d3e4fe",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary-container": "#dad7ff",
+                        "tertiary-fixed": "#e9ddff",
+                        "secondary": "#006591",
+                        "on-surface": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "on-surface-variant": "#464555",
+                        "warning": "#F59E0B",
+                        "inverse-surface": "#213145",
+                        "surface-dim": "#cbdbf5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "2xl": "64px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Manrope"],
+                        "label-md": ["JetBrains Mono"],
+                        "button-text": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "button-text": ["14px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-gradient-bg {
+            background: linear-gradient(135deg, #3525cd 0%, #22D3EE 100%);
+        }
+        .ai-pulse:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+        .mesh-gradient {
+            background-color: #f8f9ff;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(243, 98%, 95%, 1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(189, 98%, 95%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(243, 98%, 95%, 1) 0, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(189, 98%, 95%, 1) 0, transparent 50%);
+        }
+        .dark .mesh-gradient {
+            background-color: #0b1c30;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(243, 50%, 15%, 1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(189, 50%, 15%, 1) 0, transparent 50%);
+        }
+    </style>
+</head>
+<body class="mesh-gradient min-h-screen flex flex-col font-body-md text-on-background transition-colors duration-500">
+<!-- Top Navigation (Shell suppressed for linear login flow, but logo branding retained) -->
+<header class="fixed top-0 w-full px-lg py-md flex justify-between items-center z-50">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 ai-gradient-bg rounded-xl flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">EduSphere AI</span>
+</div>
+<button class="p-sm rounded-full hover:bg-surface-container-high dark:hover:bg-surface-glass-dark transition-all" id="theme-toggle">
+<span class="material-symbols-outlined text-on-surface-variant dark:text-inverse-primary">light_mode</span>
+</button>
+</header>
+<main class="flex-grow flex items-center justify-center px-gutter pt-2xl pb-xl">
+<div class="w-full max-w-[480px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+<!-- Login Card -->
+<div class="glass-card rounded-2xl p-xl shadow-2xl relative overflow-hidden">
+<!-- Decorative AI Glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-ai-accent/20 blur-[80px] rounded-full"></div>
+<div class="absolute -bottom-24 -left-24 w-48 h-48 bg-primary/20 blur-[80px] rounded-full"></div>
+<div class="relative z-10">
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-base">Welcome Back</h1>
+<p class="text-on-surface-variant font-body-md mb-xl">Continue your personalized learning journey with AI-driven insights.</p>
+<!-- Role Switcher -->
+<div class="flex p-xs bg-surface-container-low dark:bg-surface-glass-dark rounded-xl mb-xl border border-outline-variant/30">
+<button class="flex-1 py-sm rounded-lg text-label-md font-label-md transition-all bg-primary text-on-primary shadow-sm" id="role-student" onclick="switchRole('student')">
+                            Student
+                        </button>
+<button class="flex-1 py-sm rounded-lg text-label-md font-label-md transition-all text-on-surface-variant hover:text-primary" id="role-educator" onclick="switchRole('educator')">
+                            Educator
+                        </button>
+</div>
+<!-- Login Form -->
+<form class="space-y-lg" onsubmit="return false;">
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant px-base">Academic Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+<input class="w-full pl-12 pr-4 py-md bg-surface-container-lowest dark:bg-on-background/50 border border-outline-variant/50 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md outline-none" placeholder="name@university.edu" type="email"/>
+</div>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between px-base">
+<label class="font-label-md text-label-md text-on-surface-variant">Security Password</label>
+<a class="font-label-md text-label-md text-primary hover:underline" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+<input class="w-full pl-12 pr-12 py-md bg-surface-container-lowest dark:bg-on-background/50 border border-outline-variant/50 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md outline-none" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-sm px-base">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" id="remember" type="checkbox"/>
+<label class="font-body-md text-body-md text-on-surface-variant cursor-pointer select-none" for="remember">Remember this session</label>
+</div>
+<button class="w-full py-md ai-gradient-bg text-on-primary font-button-text text-button-text rounded-xl shadow-lg shadow-primary/20 ai-pulse hover:brightness-110 transition-all flex items-center justify-center gap-2 group">
+<span>Sign Into Portal</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-xl">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-label-md">
+<span class="bg-transparent px-4 text-outline font-label-md">OR INSTITUTIONAL LOGIN</span>
+</div>
+</div>
+<!-- Social Auth -->
+<div class="grid grid-cols-2 gap-md">
+<button class="flex items-center justify-center gap-2 py-md px-lg bg-surface-container-lowest dark:bg-on-background/50 border border-outline-variant/50 rounded-xl hover:bg-surface-container-low transition-all">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1CEcJq_c7k08_Ai8xvRMJDKlKve7VcjPsL3G9RCaBV9w7asYoAl6y7C45jQ7L7wQCLNeSPJWOSCfT35bRmM8dwvGNKABzOC_aKRix5-iMry-0MITfPASkHcyjt_zIHTIySpl01xa1zD5SgFQvEIePe7rjdd0lWvveVZ10rNcSrET1PsKRoEgHSiCY6ZriHMGHi10rSVer26El4tlzMbLXttu722A-tVLWo8KqNeridBEudGs2hBnSPTl2mrFnr59RIFoqgMcNzR_8"/>
+<span class="font-button-text text-button-text text-on-surface">Google</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-md px-lg bg-surface-container-lowest dark:bg-on-background/50 border border-outline-variant/50 rounded-xl hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[#0078D4]">grid_view</span>
+<span class="font-button-text text-button-text text-on-surface">Microsoft</span>
+</button>
+</div>
+<p class="text-center mt-xl font-body-md text-body-md text-on-surface-variant">
+                        New to the sphere? <a class="text-primary font-bold hover:underline" href="#">Request Access</a>
+</p>
+</div>
+</div>
+<!-- Trust Badges -->
+<div class="mt-xl flex justify-center items-center gap-xl opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<span class="text-label-md font-label-md">FERPA Compliant</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">security</span>
+<span class="text-label-md font-label-md">ISO 27001</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-gutter max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+<p class="font-body-md text-body-md text-on-surface-variant">© 2024 EduSphere AI. All rights reserved.</p>
+<div class="flex gap-lg">
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</footer>
+<script>
+        // Role Switcher Logic
+        function switchRole(role) {
+            const studentBtn = document.getElementById('role-student');
+            const educatorBtn = document.getElementById('role-educator');
+            
+            if (role === 'student') {
+                studentBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+                studentBtn.classList.remove('text-on-surface-variant');
+                educatorBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+                educatorBtn.classList.add('text-on-surface-variant');
+            } else {
+                educatorBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+                educatorBtn.classList.remove('text-on-surface-variant');
+                studentBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+                studentBtn.classList.add('text-on-surface-variant');
+            }
+        }
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeToggle.innerHTML = '<span class="material-symbols-outlined text-on-surface-variant">light_mode</span>';
+            } else {
+                html.classList.add('dark');
+                themeToggle.innerHTML = '<span class="material-symbols-outlined text-inverse-primary">dark_mode</span>';
+            }
+        });
+
+        // Atmospheric Micro-interactions
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            // Subtle parallax for background glows could go here
+        });
+    </script>
+</body></html>

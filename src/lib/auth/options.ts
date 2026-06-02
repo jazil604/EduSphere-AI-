@@ -1,0 +1,75 @@
+import NextAuth, { type NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { connectToDatabase } from "@/lib/db";
+import { UserModel } from "@/lib/db/models/User";
+import type { UserRole } from "@/types";
+import { buildJwtClaims, getSessionUserFromJwt } from "@/lib/auth/jwt";
+
+export const authConfig = {
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login",
+  },
+  providers: [
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const email = String(credentials?.email ?? "").trim().toLowerCase();
+        const password = String(credentials?.password ?? "");
+
+        if (!email || !password) {
+          return null;
+        }
+
+        await connectToDatabase();
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+          return null;
+        }
+
+        const passwordMatches = await bcrypt.compare(password, user.password);
+        if (!passwordMatches) {
+          return null;
+        }
+
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          role: user.role as UserRole,
+          approved: user.approved,
+        };
+      },
+    }),
+  ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        Object.assign(
+          token,
+          buildJwtClaims(user as { id: string; name?: string | null; email?: string | null; role: UserRole; approved?: boolean }),
+        );
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        const authUser = getSessionUserFromJwt(token);
+        session.user.id = authUser.id;
+        session.user.role = authUser.role;
+        session.user.approved = authUser.approved;
+      }
+      return session;
+    },
+  },
+} satisfies NextAuthConfig;
+
+export const { auth, handlers, signIn, signOut } = NextAuth(authConfig);
