@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
 
-const uri = process.env.MONGODB_URI;
-
-if (!uri) {
-  throw new Error("Missing MONGODB_URI environment variable.");
-}
-
-const mongoUri = uri;
 const dbName = "ai-learning-tutor";
 
 type MongooseCache = {
@@ -20,16 +13,37 @@ const globalForMongoose = globalThis as typeof globalThis & {
 
 globalForMongoose.mongoose ??= { conn: null, promise: null };
 
+async function connectWithUri(uri: string) {
+  return mongoose.connect(uri, {
+    dbName,
+    bufferCommands: false,
+    connectTimeoutMS: 5_000,
+    serverSelectionTimeoutMS: 5_000,
+  });
+}
+
 export async function connectToDatabase() {
   if (globalForMongoose.mongoose?.conn) {
     return globalForMongoose.mongoose.conn;
   }
 
-  globalForMongoose.mongoose!.promise ??= mongoose.connect(mongoUri, {
-    dbName,
-    bufferCommands: false,
-  });
+  if (!globalForMongoose.mongoose?.promise) {
+    globalForMongoose.mongoose!.promise = (async () => {
+      const uri = process.env.MONGODB_URI?.trim();
 
-  globalForMongoose.mongoose!.conn = await globalForMongoose.mongoose!.promise;
-  return globalForMongoose.mongoose!.conn;
+      if (!uri) {
+        throw new Error("Missing MONGODB_URI environment variable.");
+      }
+
+      return connectWithUri(uri);
+    })();
+  }
+
+  try {
+    globalForMongoose.mongoose!.conn = await globalForMongoose.mongoose!.promise;
+    return globalForMongoose.mongoose!.conn;
+  } catch (error) {
+    globalForMongoose.mongoose!.promise = null;
+    throw error;
+  }
 }

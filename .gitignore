@@ -2,6 +2,7 @@
 node_modules
 dist
 coverage
+.mongo-data
 .env*.local
 !.env.example
 npm-debug.log*
