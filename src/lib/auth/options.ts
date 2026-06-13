@@ -1,10 +1,12 @@
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { NextResponse, type NextRequest } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { UserModel } from "@/lib/db/models/User";
 import type { UserRole } from "@/types";
 import { buildJwtClaims, getSessionUserFromJwt } from "@/lib/auth/jwt";
+import { canRoleAccessPath, getDashboardPathForRole } from "@/lib/auth/permissions";
 
 export const authConfig = {
   session: {
@@ -51,6 +53,22 @@ export const authConfig = {
     }),
   ],
   callbacks: {
+    authorized({ auth, request }: { auth: { user?: { role?: UserRole } } | null; request: NextRequest }) {
+      const pathname = request.nextUrl.pathname;
+      const role = auth?.user?.role;
+
+      if (!auth || !role) {
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("callbackUrl", `${pathname}${request.nextUrl.search}`);
+        return NextResponse.redirect(loginUrl);
+      }
+
+      if (!canRoleAccessPath(role, pathname)) {
+        return NextResponse.redirect(new URL(getDashboardPathForRole(role), request.url));
+      }
+
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         Object.assign(
