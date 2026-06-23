@@ -565,8 +565,17 @@ export async function getStudentCourses(userId: string) {
 
 export async function joinCourseByCode(userId: string, enrollmentCode: string) {
   await connectToDatabase();
-  const course = (await CourseModel.findOne({ enrollmentCode: enrollmentCode.trim().toUpperCase(), isPublished: true }).lean()) as any;
-  if (!course) throw new Error("Course not found");
+  const normalizedCode = enrollmentCode.trim().toUpperCase();
+  const course = (await CourseModel.findOne({ enrollmentCode: normalizedCode }).lean()) as any;
+
+  if (!course) {
+    throw new Error("Course not found");
+  }
+
+  if (!course.isPublished) {
+    throw new Error("Course is not published yet.");
+  }
+
   await StudentModel.findOneAndUpdate(
     { userId },
     { $addToSet: { enrolledCourses: course._id } },

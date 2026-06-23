@@ -325,7 +325,7 @@ export async function createCourse(userId: string, input: { title: string; descr
     thumbnail: input.thumbnail?.trim() ?? "",
     lessons: [],
     enrollmentCode,
-    isPublished: false,
+    isPublished: true,
   });
   return course;
 }

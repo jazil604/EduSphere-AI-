@@ -11,7 +11,22 @@ export async function POST(request: Request) {
     const course = await joinCourseByCode(session.user.id, String(body.enrollmentCode));
     return NextResponse.json(course, { status: 201 });
   } catch (error) {
-    const status = error instanceof Error && error.message === "Unauthorized" ? 401 : 500;
-    return NextResponse.json({ error: "Failed to join course." }, { status });
+    if (error instanceof Error) {
+      if (error.message === "Unauthorized") {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      if (error.message === "Course not found") {
+        return NextResponse.json({ error: error.message }, { status: 404 });
+      }
+
+      if (error.message === "Course is not published yet.") {
+        return NextResponse.json({ error: error.message }, { status: 403 });
+      }
+
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ error: "Failed to join course." }, { status: 500 });
   }
 }

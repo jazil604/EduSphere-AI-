@@ -26,6 +26,8 @@ export default function JoinCoursePage() {
     },
   });
 
+  const joinError = mutation.error instanceof Error ? mutation.error.message : "";
+
   return (
     <StudentShell description="Enter the enrollment code shared by your teacher to unlock the course instantly." title="Join a Course">
       <div className="mx-auto grid max-w-3xl gap-6 xl:grid-cols-[1fr_0.8fr]">
@@ -58,7 +60,9 @@ export default function JoinCoursePage() {
             </Button>
           </form>
 
-          {mutation.isError ? <p className="mt-4 text-sm text-rose-600">Failed to join course. Check the code and try again.</p> : null}
+          {mutation.isError ? (
+            <p className="mt-4 text-sm text-rose-600">{joinError || "Failed to join course. Check the code and try again."}</p>
+          ) : null}
         </section>
 
         <aside className="glass-card rounded-3xl p-6">
