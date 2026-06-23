@@ -9,6 +9,7 @@ import { buildJwtClaims, getSessionUserFromJwt } from "@/lib/auth/jwt";
 import { canRoleAccessPath, getDashboardPathForRole } from "@/lib/auth/permissions";
 
 export const authConfig = {
+  trustHost: true,
   session: {
     strategy: "jwt",
   },
