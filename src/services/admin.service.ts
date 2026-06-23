@@ -153,10 +153,23 @@ function toObjectIdString(value: unknown) {
 
 export async function requireAdmin() {
   const session = await auth();
+  const userId = session?.user?.id;
 
-  if (!session?.user || session.user.role !== "admin") {
+  if (!session?.user || !userId) {
     throw new Error("Unauthorized");
   }
+
+  if (session.user.role === "admin") {
+    return session;
+  }
+
+  await connectToDatabase();
+  const user = (await UserModel.findById(userId).select("role").lean()) as { role?: UserRole } | null;
+  if (user?.role !== "admin") {
+    throw new Error("Unauthorized");
+  }
+
+  session.user.role = user.role;
 
   return session;
 }

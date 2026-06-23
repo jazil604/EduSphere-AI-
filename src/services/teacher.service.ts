@@ -134,10 +134,23 @@ function average(values: number[]) {
 
 export async function requireTeacher() {
   const session = await auth();
+  const userId = session?.user?.id;
 
-  if (!session?.user || session.user.role !== "teacher") {
+  if (!session?.user || !userId) {
     throw new Error("Unauthorized");
   }
+
+  if (session.user.role === "teacher") {
+    return session;
+  }
+
+  await connectToDatabase();
+  const user = (await UserModel.findById(userId).select("role").lean()) as { role?: UserRole } | null;
+  if (user?.role !== "teacher") {
+    throw new Error("Unauthorized");
+  }
+
+  session.user.role = user.role;
 
   return session;
 }

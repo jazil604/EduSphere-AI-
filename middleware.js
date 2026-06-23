@@ -1,18 +1,15 @@
-export const runtime = "nodejs";
-
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import type { UserRole } from "@/types";
-import { canRoleAccessPath, getDashboardPathForRole } from "@/lib/auth/permissions";
+import { canRoleAccessPath, getDashboardPathForRole } from "./src/lib/auth/permissions";
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  const role = token?.role as UserRole | undefined;
   const pathname = request.nextUrl.pathname;
+  const role = token?.role;
 
   if (!token || !role) {
     const loginUrl = new URL("/login", request.url);
@@ -28,5 +25,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/teacher/:path*", "/student/:path*"],
+  matcher: ["/admin", "/admin/:path*", "/teacher", "/teacher/:path*", "/student", "/student/:path*"],
 };

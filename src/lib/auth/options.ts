@@ -69,23 +69,46 @@ export const authConfig = {
 
       return true;
     },
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
         Object.assign(
           token,
           buildJwtClaims(user as { id: string; name?: string | null; email?: string | null; role: UserRole; approved?: boolean }),
         );
+        return token;
       }
+
+      if (token.sub && !token.role) {
+        await connectToDatabase();
+        const dbUser = (await UserModel.findById(token.sub).select("role").lean()) as { role?: UserRole } | null;
+        if (dbUser) {
+          token.role = dbUser.role as UserRole;
+        }
+      }
+
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         const authUser = getSessionUserFromJwt(token);
         session.user.id = authUser.id;
-        session.user.role = authUser.role;
-        session.user.approved = authUser.approved;
+        session.user.role = authUser.role ?? session.user.role;
+        session.user.approved = authUser.approved ?? session.user.approved;
       }
       return session;
+    },
+    redirect({ url, baseUrl }) {
+      const resolvedUrl = new URL(url, baseUrl);
+
+      if (resolvedUrl.origin !== baseUrl) {
+        return baseUrl;
+      }
+
+      if (resolvedUrl.pathname === "/login" || resolvedUrl.pathname.startsWith("/signup")) {
+        return baseUrl;
+      }
+
+      return resolvedUrl.toString();
     },
   },
 } satisfies NextAuthConfig;

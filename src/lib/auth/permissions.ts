@@ -1,9 +1,9 @@
 import type { UserRole } from "@/types";
 
 export const ROLE_HOME_PATHS = {
-  admin: "/admin",
-  teacher: "/teacher",
-  student: "/student",
+  admin: "/admin/dashboard",
+  teacher: "/teacher/courses",
+  student: "/student/dashboard",
 } as const satisfies Record<UserRole, string>;
 
 export function getDashboardPathForRole(role: UserRole) {
@@ -21,4 +21,3 @@ export function canRoleAccessPath(role: UserRole, pathname: string) {
   const requiredRole = getRoleFromPathname(pathname);
   return requiredRole === null || requiredRole === role;
 }
-
